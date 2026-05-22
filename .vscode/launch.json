@@ -14,6 +14,14 @@
         "--reload"
       ],
       "jinja": true
+    },
+    {
+      "name": "Launch MCP Server",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/src/mcp_server.py",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}/src"
     }
   ]
 }
