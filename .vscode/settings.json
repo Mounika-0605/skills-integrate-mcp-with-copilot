@@ -1,0 +1,11 @@
+{
+  "github.copilot.enable": {
+    "*": true
+  },
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.python",
+    "editor.formatOnSave": true
+  },
+  "python.linting.enabled": true,
+  "python.linting.pylintEnabled": true
+}

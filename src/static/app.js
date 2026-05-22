@@ -1,9 +1,14 @@
+console.log("app.js loaded");
+
 document.addEventListener("DOMContentLoaded", () => {
   const activitiesList = document.getElementById("activities-list");
   const messageDiv = document.getElementById("message");
   const searchInput = document.getElementById("search-input");
   const categoryFilter = document.getElementById("category-filter");
   const sortFilter = document.getElementById("sort-filter");
+  const loginBtn = document.getElementById("login-btn");
+
+  let isAdmin = false;
 
   // Function to fetch activities from API
   async function fetchActivities() {
@@ -94,7 +99,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
           try {
             const response = await fetch(
-              `/activities/${encodeURIComponent(activity)}/signup?email=${encodeURIComponent(email)}`,
+              `/activities/${encodeURIComponent(activity)}/signup?email=${encodeURIComponent(email)}&admin=${isAdmin}`,
               {
                 method: "POST",
               }
@@ -146,7 +151,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const response = await fetch(
         `/activities/${encodeURIComponent(
           activity
-        )}/unregister?email=${encodeURIComponent(email)}`,
+        )}/unregister?email=${encodeURIComponent(email)}&admin=${isAdmin}`,
         {
           method: "DELETE",
         }
@@ -178,6 +183,33 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error("Error unregistering:", error);
     }
   }
+
+  loginBtn.addEventListener("click", async () => {
+    const username = prompt("Enter teacher username:");
+    const password = prompt("Enter teacher password:");
+
+    if (!username || !password) return;
+
+    try {
+      const response = await fetch(
+        `/login?username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`,
+        {
+          method: "POST",
+        }
+      );
+
+      const result = await response.json();
+
+      if (response.ok) {
+        isAdmin = true;
+        alert("Teacher login successful");
+      } else {
+        alert(result.detail || "Login failed");
+      }
+    } catch (error) {
+      alert("Login request failed");
+    }
+  });
   searchInput.addEventListener("input", fetchActivities);
 
   categoryFilter.addEventListener("change", fetchActivities);
