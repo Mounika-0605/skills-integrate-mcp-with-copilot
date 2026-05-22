@@ -34,12 +34,6 @@ main {
   gap: 30px;
 }
 
-@media (min-width: 768px) {
-  main {
-    grid-template-columns: 2fr 1fr;
-  }
-}
-
 section {
   background-color: white;
   padding: 20px;
