@@ -1,6 +1,9 @@
 document.addEventListener("DOMContentLoaded", () => {
   const activitiesList = document.getElementById("activities-list");
   const messageDiv = document.getElementById("message");
+  const searchInput = document.getElementById("search-input");
+  const categoryFilter = document.getElementById("category-filter");
+  const sortFilter = document.getElementById("sort-filter");
 
   // Function to fetch activities from API
   async function fetchActivities() {
@@ -12,7 +15,38 @@ document.addEventListener("DOMContentLoaded", () => {
       activitiesList.innerHTML = "";
 
       // Populate activities list
-      Object.entries(activities).forEach(([name, details]) => {
+      let filteredActivities = Object.entries(activities);
+
+      const searchValue = searchInput.value.toLowerCase();
+      const categoryValue = categoryFilter.value;
+      const sortValue = sortFilter.value;
+
+      filteredActivities = filteredActivities.filter(([name, details]) => {
+        const matchesSearch =
+          name.toLowerCase().includes(searchValue) ||
+          details.description.toLowerCase().includes(searchValue);
+
+        const matchesCategory =
+          categoryValue === "all" ||
+          details.category?.toLowerCase() === categoryValue;
+
+        return matchesSearch && matchesCategory;
+      });
+
+      if (sortValue === "name") {
+        filteredActivities.sort((a, b) => a[0].localeCompare(b[0]));
+      } else if (sortValue === "spots") {
+        filteredActivities.sort((a, b) => {
+          const spotsA =
+            a[1].max_participants - a[1].participants.length;
+
+          const spotsB =
+            b[1].max_participants - b[1].participants.length;
+
+          return spotsB - spotsA;
+        });
+      }
+      filteredActivities.forEach(([name, details]) => {
         const activityCard = document.createElement("div");
         activityCard.className = "activity-card";
 
@@ -144,6 +178,11 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error("Error unregistering:", error);
     }
   }
+  searchInput.addEventListener("input", fetchActivities);
+
+  categoryFilter.addEventListener("change", fetchActivities);
+
+  sortFilter.addEventListener("change", fetchActivities);
   // Initialize app
   fetchActivities();
 });

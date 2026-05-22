@@ -190,3 +190,38 @@ footer {
   padding: 20px;
   color: #666;
 }
+
+#filters-container {
+  width: 100%;
+  max-width: 500px;
+}
+
+.filter-group {
+  margin-bottom: 15px;
+}
+
+.filter-group input,
+.filter-group select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+@media (min-width: 768px) {
+  main {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  #filters-container {
+    max-width: 300px;
+    position: sticky;
+    top: 20px;
+  }
+
+  #activities-container {
+    flex: 1;
+  }
+}
